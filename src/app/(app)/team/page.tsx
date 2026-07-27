@@ -276,7 +276,7 @@ export default function TeamPage() {
             </div>
             <div className="space-y-2">
               <Label>Role Akses</Label>
-              <Select value={inviteRole} onValueChange={setInviteRole}>
+              <Select value={inviteRole} onValueChange={(val) => setInviteRole(val || 'partner')}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
