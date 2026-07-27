@@ -1,7 +1,8 @@
-const CACHE_NAME = 'tripkas-cache-v2';
+const CACHE_NAME = 'tripkas-cache-v3';
 const urlsToCache = [
   '/',
   '/icon-512x512.png',
+  '/icon-192x192.png',
   '/manifest.webmanifest'
 ];
 
