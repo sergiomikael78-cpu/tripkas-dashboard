@@ -19,12 +19,13 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "default",
     title: "DataRokok.SMJ",
-  },
-  manifest: "/manifest.json"
+  }
 };
 
 import { ReactQueryProvider } from "@/components/providers/ReactQueryProvider";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+
+import { InstallPWA } from "@/components/InstallPWA";
 
 export default function RootLayout({
   children,
@@ -37,6 +38,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
         <ServiceWorkerRegister />
+        <InstallPWA />
         <ReactQueryProvider>
           {children}
         </ReactQueryProvider>
