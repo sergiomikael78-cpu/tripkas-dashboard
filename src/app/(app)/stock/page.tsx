@@ -297,7 +297,7 @@ export default function StockPage() {
       >
         <form onSubmit={handleAdjustSubmit} className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label>Pilih Produk</Label>
+            <Label className="text-xs font-semibold">Pilih Produk Rokok</Label>
             <Select value={adjProductId} onValueChange={(val) => setAdjProductId(val as string)}>
               <SelectTrigger className="h-10 rounded-xl">
                 <span data-slot="select-value" className={`flex flex-1 text-left line-clamp-1 ${!adjProductId ? 'text-muted-foreground' : ''}`}>
@@ -315,7 +315,7 @@ export default function StockPage() {
           </div>
 
           <div className="space-y-2">
-            <Label>Pilih Lokasi / Trip</Label>
+            <Label className="text-xs font-semibold">Pilih Lokasi / Trip</Label>
             <Select value={adjTripId} onValueChange={(val) => setAdjTripId(val as string)}>
               <SelectTrigger className="h-10 rounded-xl">
                 <span data-slot="select-value" className={`flex flex-1 text-left line-clamp-1 ${adjTripId === 'none' ? 'text-muted-foreground' : ''}`}>
@@ -329,11 +329,11 @@ export default function StockPage() {
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-xs text-muted-foreground">Pilih di mana stok ini akan disesuaikan.</p>
+            <p className="text-[11px] text-muted-foreground">Pilih lokasi spesifik di mana penyesuaian fisik dilakukan.</p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="adjDelta">Perubahan Stok (+ untuk tambah, - untuk kurang)</Label>
+            <Label htmlFor="adjDelta" className="text-xs font-semibold">Perubahan Stok (+ untuk tambah, - untuk kurang)</Label>
             <Input
               id="adjDelta"
               type="number"
@@ -341,23 +341,26 @@ export default function StockPage() {
               onChange={(e) => setAdjDelta(e.target.value)}
               placeholder="Misal: -2 atau +5"
               required
-              className="h-10 rounded-xl"
+              className="h-10 rounded-xl font-bold tabular-nums"
             />
-            <p className="text-xs text-muted-foreground">
-              Contoh: isi <strong>-2</strong> jika stok fisik kurang 2 dari sistem, atau <strong>+3</strong> jika stok fisik lebih 3.
+            <p className="text-[11px] text-muted-foreground">
+              Contoh: isi <strong className="text-rose-500 font-bold">-2</strong> jika stok fisik kurang 2, atau <strong className="text-emerald-500 font-bold">+3</strong> jika stok lebih 3.
             </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="adjReason">Alasan Penyesuaian (WAJIB)</Label>
+            <Label htmlFor="adjReason" className="text-xs font-semibold flex items-center justify-between">
+              <span>Alasan Penyesuaian</span>
+              <span className="text-[10px] font-bold text-rose-500 uppercase tracking-wider">(Field Wajib)</span>
+            </Label>
             <Textarea
               id="adjReason"
               value={adjReason}
               onChange={(e) => setAdjReason(e.target.value)}
-              placeholder="Barang rusak, barang hilang, salah hitung sebelumnya, dll..."
+              placeholder="Barang rusak saat perjalanan, barang hilang, salah hitung sebelumnya, dll..."
               rows={3}
               required
-              className="rounded-xl"
+              className="rounded-xl border-amber-500/30 focus-visible:border-amber-500"
             />
           </div>
 
