@@ -285,10 +285,10 @@ export function SaleForm({ open, onOpenChange }: SaleFormProps) {
           )}
 
           {/* Form Tambah Item */}
-          <div className="bg-green-50/50 p-4 border border-green-200 rounded-lg space-y-3">
-            <h4 className="text-sm font-semibold text-green-900">Tambah Barang</h4>
+          <div className="bg-muted/40 p-4 border border-amber-500/30 rounded-xl space-y-3 shadow-inner">
+            <h4 className="text-xs font-bold text-amber-500 uppercase tracking-wider">Tambah Barang ke Keranjang</h4>
             <div className="space-y-2">
-              <Label>Produk</Label>
+              <Label className="text-xs font-semibold">Pilih Produk Rokok</Label>
               <Select 
                 value={selectedProductId} 
                 onValueChange={(val) => {
@@ -299,7 +299,7 @@ export function SaleForm({ open, onOpenChange }: SaleFormProps) {
                   }
                 }}
               >
-                <SelectTrigger className="bg-white">
+                <SelectTrigger className="h-10 rounded-xl">
                   <SelectValue placeholder="Pilih Produk" />
                 </SelectTrigger>
                 <SelectContent>
@@ -314,20 +314,20 @@ export function SaleForm({ open, onOpenChange }: SaleFormProps) {
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div className="space-y-2">
-                <Label>Kuantitas</Label>
+                <Label className="text-xs font-semibold">Kuantitas</Label>
                 <Input 
                   type="number" 
                   min="1" 
                   placeholder="0" 
-                  className="bg-white"
+                  className="h-10 rounded-xl font-bold tabular-nums"
                   value={itemQty} 
                   onChange={e => setItemQty(Number(e.target.value) || '')} 
                 />
               </div>
               <div className="space-y-2">
-                <Label>Mata Uang</Label>
+                <Label className="text-xs font-semibold">Mata Uang</Label>
                 <Select value={itemCurrency} onValueChange={(val) => setItemCurrency(val as 'IDR' | 'KHR' | 'USD')}>
-                  <SelectTrigger className="bg-white">
+                  <SelectTrigger className="h-10 rounded-xl">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -338,28 +338,31 @@ export function SaleForm({ open, onOpenChange }: SaleFormProps) {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Harga Jual</Label>
+                <Label className="text-xs font-semibold">Harga Jual</Label>
                 <CurrencyInput 
                   min="0" 
                   placeholder="0" 
                   value={itemPrice} 
                   onChangeValue={(val) => setItemPrice(val)} 
+                  className="h-10 rounded-xl font-bold tabular-nums text-emerald-500"
                 />
               </div>
             </div>
             {itemCurrency !== 'IDR' && itemPrice !== '' && (
-              <div className="text-sm text-green-700 bg-green-100/50 p-2 rounded border border-green-200">
-                Estimasi IDR: <span className="font-bold">Rp {
-                  (itemCurrency === 'KHR' 
-                    ? (Number(itemPrice) / settings.khr_to_usd_rate) * settings.usd_to_idr_rate 
-                    : Number(itemPrice) * settings.usd_to_idr_rate).toLocaleString('id-ID', { maximumFractionDigits: 0 })
-                }</span>
+              <div className="text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 p-3 rounded-xl border border-emerald-500/25 space-y-1">
+                <span className="font-semibold">Estimasi Konversi Rupiah:</span>
+                <p className="text-sm font-bold tabular-nums">
+                  Rp {
+                    (itemCurrency === 'KHR' 
+                      ? (Number(itemPrice) / settings.khr_to_usd_rate) * settings.usd_to_idr_rate 
+                      : Number(itemPrice) * settings.usd_to_idr_rate).toLocaleString('id-ID', { maximumFractionDigits: 0 })
+                  }
+                </p>
               </div>
             )}
             <Button 
               type="button" 
-              variant="outline" 
-              className="w-full border-green-500 text-green-700 hover:bg-green-100"
+              className="w-full h-10 rounded-xl font-semibold shadow-md shadow-amber-500/15"
               onClick={handleAddToCart}
             >
               <Plus className="h-4 w-4 mr-2" /> Masukkan Keranjang

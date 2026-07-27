@@ -280,9 +280,9 @@ export default function CreateSalePage() {
           <CardContent className="space-y-6">
             
             {/* Form Tambah Item */}
-            <div className="bg-muted/50 p-4 rounded-lg space-y-4 border">
+            <div className="bg-muted/40 p-4 rounded-xl space-y-4 border border-amber-500/30 shadow-inner">
               <div className="space-y-2">
-                <Label>Produk</Label>
+                <Label className="text-xs font-semibold">Pilih Produk Rokok</Label>
                 <Select 
                   value={selectedProductId} 
                   onValueChange={(val) => {
@@ -294,7 +294,7 @@ export default function CreateSalePage() {
                     }
                   }}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-10 rounded-xl">
                     <span data-slot="select-value" className={`flex flex-1 text-left line-clamp-1 ${!selectedProductId ? 'text-muted-foreground' : ''}`}>
                       {selectedProductId ? (activeProducts.find(p => p.id === selectedProductId)?.name || selectedProductId) : 'Pilih Produk'}
                     </span>
@@ -311,19 +311,20 @@ export default function CreateSalePage() {
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <Label>Kuantitas</Label>
+                  <Label className="text-xs font-semibold">Kuantitas Item</Label>
                   <Input 
                     type="number" 
                     min="1" 
                     placeholder="0" 
                     value={itemQty} 
                     onChange={e => setItemQty(Number(e.target.value) || '')} 
+                    className="h-10 rounded-xl font-bold tabular-nums"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Mata Uang</Label>
+                  <Label className="text-xs font-semibold">Mata Uang Transaksi</Label>
                   <Select value={itemCurrency} onValueChange={(val) => setItemCurrency(val as 'IDR' | 'KHR' | 'USD')}>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-10 rounded-xl">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -334,28 +335,31 @@ export default function CreateSalePage() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Harga Jual</Label>
+                  <Label className="text-xs font-semibold">Harga Jual per Satuan</Label>
                   <CurrencyInput 
                     min="0" 
                     placeholder="0" 
                     value={itemPrice} 
                     onChangeValue={(val) => setItemPrice(val)} 
+                    className="h-10 rounded-xl font-bold tabular-nums text-emerald-500"
                   />
                 </div>
               </div>
               {itemCurrency !== 'IDR' && itemPrice !== '' && (
-                <div className="text-sm text-green-700 bg-green-100/50 p-2 rounded border border-green-200">
-                  Estimasi IDR: <span className="font-bold">Rp {
-                    (itemCurrency === 'KHR' 
-                      ? (Number(itemPrice) / (settings?.khr_to_usd_rate || 4000)) * (settings?.usd_to_idr_rate || 16000) 
-                      : Number(itemPrice) * (settings?.usd_to_idr_rate || 16000)).toLocaleString('id-ID', { maximumFractionDigits: 0 })
-                  }</span>
+                <div className="text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 p-3 rounded-xl border border-emerald-500/25 space-y-1">
+                  <span className="font-semibold">Estimasi Konversi Rupiah:</span>
+                  <p className="text-sm font-bold tabular-nums">
+                    Rp {
+                      (itemCurrency === 'KHR' 
+                        ? (Number(itemPrice) / (settings?.khr_to_usd_rate || 4000)) * (settings?.usd_to_idr_rate || 16000) 
+                        : Number(itemPrice) * (settings?.usd_to_idr_rate || 16000)).toLocaleString('id-ID', { maximumFractionDigits: 0 })
+                    }
+                  </p>
                 </div>
               )}
               <Button 
                 type="button" 
-                variant="secondary" 
-                className="w-full"
+                className="w-full h-10 rounded-xl font-semibold shadow-md shadow-amber-500/15"
                 onClick={handleAddToCart}
                 disabled={!selectedProductId || !itemQty || !itemPrice}
               >
@@ -367,21 +371,21 @@ export default function CreateSalePage() {
             {cart.length > 0 ? (
               <div className="space-y-3">
                 {cart.map((item, idx) => (
-                  <div key={idx} className="flex justify-between items-center p-3 border rounded-md shadow-sm">
+                  <div key={idx} className="flex justify-between items-center p-3.5 border border-border/80 dark:border-white/10 rounded-xl bg-card/60 shadow-sm">
                     <div>
-                      <p className="font-medium">{item.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {item.quantity} {item.unit} x {item.currency === 'IDR' ? 'Rp' : ''} {item.foreign_sell_price.toLocaleString('en-US')} {item.currency !== 'IDR' ? item.currency : ''}
+                      <p className="font-bold text-foreground">{item.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {item.quantity} {item.unit} x {item.currency === 'IDR' ? 'Rp' : ''} {item.foreign_sell_price.toLocaleString('id-ID')} {item.currency !== 'IDR' ? item.currency : ''}
                       </p>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-right">
                         {item.currency !== 'IDR' && (
-                          <p className="font-semibold text-blue-600 dark:text-blue-400 tabular-nums text-sm">
-                            {(item.quantity * item.foreign_sell_price).toLocaleString('en-US')} {item.currency}
+                          <p className="font-bold text-amber-500 tabular-nums text-sm">
+                            {item.foreign_sell_price.toLocaleString('id-ID')} {item.currency}
                           </p>
                         )}
-                        <p className={`tabular-nums ${item.currency !== 'IDR' ? 'text-xs text-muted-foreground' : 'font-semibold text-green-600 dark:text-green-500'}`}>
+                        <p className={`tabular-nums font-bold ${item.currency !== 'IDR' ? 'text-xs text-muted-foreground' : 'text-emerald-500'}`}>
                           Rp {(item.quantity * item.sell_price).toLocaleString('id-ID')}
                         </p>
                       </div>
@@ -389,7 +393,7 @@ export default function CreateSalePage() {
                         type="button" 
                         variant="ghost" 
                         size="icon" 
-                        className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50"
+                        className="text-rose-500 hover:text-rose-600 hover:bg-rose-500/10 rounded-xl"
                         onClick={() => handleRemoveFromCart(idx)}
                       >
                         <Trash2 className="h-4 w-4" />
