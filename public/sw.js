@@ -1,8 +1,8 @@
-const CACHE_NAME = 'tripkas-cache-v1';
+const CACHE_NAME = 'tripkas-cache-v2';
 const urlsToCache = [
   '/',
   '/icon-512x512.png',
-  '/manifest.json'
+  '/manifest.webmanifest'
 ];
 
 self.addEventListener('install', (event) => {
