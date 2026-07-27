@@ -209,11 +209,11 @@ export default function CreatePurchasePage() {
           </CardHeader>
           <CardContent className="space-y-6">
             
-            {/* Form Tambah Item */}
-            <div className="bg-amber-50/50 p-4 border border-amber-200 rounded-lg space-y-4">
-              <h4 className="text-sm font-semibold text-amber-900">Tambah Barang ke Keranjang</h4>
+            {/* Form Tambah Item (Nested Card) */}
+            <div className="bg-muted/40 p-4 rounded-xl space-y-4 border border-amber-500/30 shadow-inner">
+              <h4 className="text-xs font-bold text-amber-500 uppercase tracking-wider">Tambah Barang ke Keranjang (Restok)</h4>
               <div className="space-y-2">
-                <Label>Produk</Label>
+                <Label className="text-xs font-semibold">Pilih Produk Rokok</Label>
                 <Select 
                   value={selectedProductId} 
                   onValueChange={(val) => {
@@ -224,7 +224,7 @@ export default function CreatePurchasePage() {
                     }
                   }}
                 >
-                  <SelectTrigger className="bg-white">
+                  <SelectTrigger className="h-10 rounded-xl">
                     <span data-slot="select-value" className={`flex flex-1 text-left line-clamp-1 ${!selectedProductId ? 'text-muted-foreground' : ''}`}>
                       {selectedProductId ? (activeProducts.find(p => p.id === selectedProductId)?.name || selectedProductId) : 'Pilih Produk'}
                     </span>
@@ -232,7 +232,7 @@ export default function CreatePurchasePage() {
                   <SelectContent>
                     {activeProducts.map(p => (
                       <SelectItem key={p.id} value={p.id}>
-                        {p.name}
+                        {p.name} (Stok Saat Ini: {p.current_stock} {p.unit})
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -241,30 +241,30 @@ export default function CreatePurchasePage() {
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Kuantitas</Label>
+                  <Label className="text-xs font-semibold">Kuantitas Restok</Label>
                   <Input 
                     type="number" 
                     min="1" 
                     placeholder="0" 
                     value={itemQty} 
                     onChange={e => setItemQty(Number(e.target.value) || '')} 
-                    className="bg-white"
+                    className="h-10 rounded-xl font-bold tabular-nums"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Harga Modal (Rp)</Label>
+                  <Label className="text-xs font-semibold">Harga Modal per Satuan (Rp)</Label>
                   <CurrencyInput 
                     min="0" 
                     placeholder="0" 
                     value={itemPrice} 
                     onChangeValue={(val) => setItemPrice(val)} 
+                    className="h-10 rounded-xl font-bold tabular-nums text-amber-500"
                   />
                 </div>
               </div>
               <Button 
                 type="button" 
-                variant="outline" 
-                className="w-full border-amber-500 text-amber-700 hover:bg-amber-100"
+                className="w-full h-10 rounded-xl font-semibold shadow-md shadow-amber-500/15"
                 onClick={handleAddToCart}
                 disabled={!selectedProductId || !itemQty || !itemPrice}
               >
