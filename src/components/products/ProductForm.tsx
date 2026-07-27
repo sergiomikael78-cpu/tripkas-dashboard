@@ -165,7 +165,7 @@ export function ProductForm({ open, onOpenChange, productToEdit }: ProductFormPr
           </div>
           <div className="space-y-2">
             <Label htmlFor="default_sell_currency">Mata Uang</Label>
-            <Select value={defaultSellCurrency} onValueChange={setDefaultSellCurrency}>
+            <Select value={defaultSellCurrency} onValueChange={(val) => setDefaultSellCurrency(val || 'IDR')}>
               <SelectTrigger>
                 <SelectValue placeholder="Pilih" />
               </SelectTrigger>

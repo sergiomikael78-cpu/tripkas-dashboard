@@ -23,7 +23,7 @@ export function PaymentForm({
 }) {
   const { createPayment } = usePayments()
 
-  const [amount, setAmount] = useState('')
+  const [amount, setAmount] = useState<number | ''>('')
   const [paidAt, setPaidAt] = useState(new Date().toISOString().split('T')[0])
   const [notes, setNotes] = useState('')
   const [markLunas, setMarkLunas] = useState(false)
@@ -72,7 +72,7 @@ export function PaymentForm({
           <CurrencyInput 
             id="amount" 
             value={amount}
-            onChangeValue={(val) => setAmount(String(val))}
+            onChangeValue={(val) => setAmount(val ?? '')}
             placeholder="Misal: 500000"
             required
             min="1"

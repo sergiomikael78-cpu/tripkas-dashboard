@@ -130,7 +130,7 @@ export function ExpenseForm({
 
         <div className="space-y-2">
           <Label htmlFor="currency">Mata Uang</Label>
-          <Select value={currency} onValueChange={setCurrency}>
+          <Select value={currency} onValueChange={(val) => setCurrency(val || 'IDR')}>
             <SelectTrigger>
               <SelectValue placeholder="Pilih Mata Uang" />
             </SelectTrigger>
@@ -147,7 +147,7 @@ export function ExpenseForm({
           <CurrencyInput 
             id="amount" 
             value={amount}
-            onChangeValue={(val) => setAmount(val)}
+            onChangeValue={(val) => setAmount(val ?? '')}
             placeholder="Misal: 150000"
             required
             min="1"
