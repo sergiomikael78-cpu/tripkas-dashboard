@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label'
 import { CurrencyInput } from '@/components/ui/currency-input'
 import { Button } from '@/components/ui/button'
-import { Save } from 'lucide-react'
+import { Save, Sparkles, Coins, RefreshCcw, Calculator } from 'lucide-react'
 import { useSettings } from '@/hooks/useSettings'
 
 export default function SettingsPage() {
@@ -32,77 +32,114 @@ export default function SettingsPage() {
     }
   }
 
-  if (isLoading) return <div className="p-4">Memuat pengaturan...</div>
+  if (isLoading) {
+    return (
+      <div className="space-y-6 max-w-2xl mx-auto">
+        <div className="h-8 w-48 bg-muted rounded-xl shimmer" />
+        <Card className="border border-border/60 dark:border-white/10">
+          <CardContent className="p-6 space-y-4">
+            <div className="h-20 bg-muted rounded-xl shimmer" />
+            <div className="h-20 bg-muted rounded-xl shimmer" />
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6 max-w-2xl mx-auto">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Pengaturan</h1>
-        <p className="text-muted-foreground">Kelola pengaturan kurs mata uang untuk transaksi Anda.</p>
+      {/* Header Section */}
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-foreground via-foreground to-amber-500/80 bg-clip-text text-transparent">
+            Pengaturan Kurs Mata Uang
+          </h1>
+          <Sparkles className="h-4 w-4 text-amber-500 animate-pulse-subtle" />
+        </div>
+        <p className="text-muted-foreground text-xs sm:text-sm">
+          Konfigurasi acuan konversi mata uang asing (KHR & USD) ke Rupiah untuk transaksi kasir.
+        </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Kurs Mata Uang</CardTitle>
-          <CardDescription>
-            Nilai tukar ini akan digunakan secara otomatis saat Anda mencatat penjualan dengan mata uang asing.
+      <Card className="border border-border/70 dark:border-white/10 bg-card/80 backdrop-blur-md shadow-lg overflow-hidden">
+        <CardHeader className="pb-3 border-b border-border/40 dark:border-white/5 bg-muted/20">
+          <CardTitle className="text-base font-bold flex items-center gap-2">
+            <Coins className="h-4 w-4 text-amber-500" />
+            <span>Nilai Tukar Kurs Acuan</span>
+          </CardTitle>
+          <CardDescription className="text-xs leading-relaxed">
+            Nilai tukar ini akan digunakan secara otomatis saat Anda mencatat penjualan kasir dengan KHR atau USD.
             <br />
-            <strong>Rumus KHR ke IDR:</strong> (Nominal KHR / Kurs Dollar ke Riel) × Kurs Dollar ke Rupiah
+            <span className="font-semibold text-foreground">Rumus KHR ke IDR:</span> (Nominal KHR ÷ Kurs KHR/USD) × Kurs USD/IDR
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6 pt-4">
-          <div className="space-y-3 bg-zinc-900/40 p-5 rounded-xl border border-zinc-800/50 shadow-inner">
-            <Label className="text-zinc-300 font-semibold tracking-wide">Kurs Dollar ke Riel (USD to KHR)</Label>
+
+        <CardContent className="space-y-5 pt-6">
+          {/* Rate 1: USD to KHR */}
+          <div className="space-y-2.5 p-4 rounded-2xl bg-card border border-border/60 dark:border-white/10 shadow-sm">
+            <Label className="text-xs font-bold text-foreground tracking-wide flex items-center justify-between">
+              <span>Kurs Dollar ke Riel (USD to KHR)</span>
+              <span className="text-[10px] text-amber-500 font-normal">Standard Acuan KHR</span>
+            </Label>
             <div className="flex items-center gap-3">
-              <span className="text-sm font-medium text-zinc-400">1 USD = </span>
+              <span className="text-xs font-bold text-muted-foreground shrink-0">1 USD =</span>
               <CurrencyInput 
                 value={khrRate} 
                 onChangeValue={(val) => setKhrRate(Number(val))} 
-                className="max-w-[200px] bg-zinc-950/50 border-zinc-700/50 focus:border-primary/50"
+                className="max-w-[180px] h-10 rounded-xl bg-background border-border/80 font-bold tabular-nums text-sm"
               />
-              <span className="text-sm font-medium text-zinc-400">KHR</span>
+              <span className="text-xs font-bold text-foreground">KHR</span>
             </div>
-            <p className="text-xs text-zinc-500 mt-1">
-              Contoh: 4000. Artinya 1 Dollar sama dengan 4000 Riel.
+            <p className="text-[11px] text-muted-foreground">
+              Contoh: <strong className="text-foreground font-semibold">4000</strong> (Artinya $1 = 4,000 Riel KHR)
             </p>
           </div>
 
-          <div className="space-y-3 bg-zinc-900/40 p-5 rounded-xl border border-zinc-800/50 shadow-inner">
-            <Label className="text-zinc-300 font-semibold tracking-wide">Kurs Dollar ke Rupiah (USD to IDR)</Label>
+          {/* Rate 2: USD to IDR */}
+          <div className="space-y-2.5 p-4 rounded-2xl bg-card border border-border/60 dark:border-white/10 shadow-sm">
+            <Label className="text-xs font-bold text-foreground tracking-wide flex items-center justify-between">
+              <span>Kurs Dollar ke Rupiah (USD to IDR)</span>
+              <span className="text-[10px] text-amber-500 font-normal">Standard Acuan IDR</span>
+            </Label>
             <div className="flex items-center gap-3">
-              <span className="text-sm font-medium text-zinc-400">1 USD = Rp</span>
+              <span className="text-xs font-bold text-muted-foreground shrink-0">1 USD = Rp</span>
               <CurrencyInput 
                 value={usdRate} 
                 onChangeValue={(val) => setUsdRate(Number(val))} 
-                className="max-w-[200px] bg-zinc-950/50 border-zinc-700/50 focus:border-primary/50"
+                className="max-w-[180px] h-10 rounded-xl bg-background border-border/80 font-bold tabular-nums text-sm"
               />
             </div>
-            <p className="text-xs text-zinc-500 mt-1">
-              Contoh: 18000. Artinya 1 Dollar sama dengan Rp 18.000.
+            <p className="text-[11px] text-muted-foreground">
+              Contoh: <strong className="text-foreground font-semibold">18000</strong> (Artinya $1 = Rp 18.000 IDR)
             </p>
           </div>
 
-          {khrRate && usdRate && (
-            <div className="p-5 bg-gradient-to-br from-emerald-950/40 to-zinc-900/40 border border-emerald-900/50 rounded-xl shadow-inner">
-              <h4 className="font-semibold text-emerald-400 mb-2 flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                Simulasi Perhitungan Live:
-              </h4>
-              <p className="text-sm text-zinc-300 leading-relaxed">
-                Jika Anda menjual barang seharga <strong className="text-white">135,000 KHR</strong>:
-                <br />
-                <span className="text-zinc-500">= (135,000 / {khrRate}) × Rp {usdRate.toLocaleString('id-ID')}</span>
-                <br />
-                <span className="text-lg text-emerald-300 font-bold mt-1 block">
+          {/* Live Simulation Card */}
+          {Boolean(khrRate) && Boolean(usdRate) && (
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-card border border-emerald-500/30 space-y-2">
+              <div className="flex items-center gap-2 text-xs font-bold text-emerald-500">
+                <Calculator className="h-4 w-4" />
+                <span>Simulasi Konversi Real-Time Kasir:</span>
+              </div>
+              <div className="text-xs text-muted-foreground leading-relaxed space-y-1">
+                <p>Penjualan 1 Slop Rokok seharga <strong className="text-foreground">135,000 KHR</strong>:</p>
+                <p className="font-mono text-[11px] text-muted-foreground/80">
+                  = (135,000 ÷ {Number(khrRate).toLocaleString('id-ID')}) × Rp {Number(usdRate).toLocaleString('id-ID')}
+                </p>
+                <p className="text-base font-bold text-emerald-500 tabular-nums tracking-tight pt-1">
                   = Rp {((135000 / Number(khrRate)) * Number(usdRate)).toLocaleString('id-ID', { maximumFractionDigits: 0 })}
-                </span>
-              </p>
+                </p>
+              </div>
             </div>
           )}
 
-          <Button onClick={handleSave} disabled={isUpdating} className="w-full md:w-auto h-11 px-8 rounded-xl font-bold tracking-wide shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all">
-            <Save className="h-4 w-4 mr-2" />
-            {isUpdating ? 'Menyimpan...' : 'Simpan Pengaturan'}
+          <Button 
+            onClick={handleSave} 
+            disabled={isUpdating} 
+            className="w-full sm:w-auto h-11 px-6 rounded-xl font-bold tracking-wide shadow-md shadow-amber-500/20 gap-2"
+          >
+            {isUpdating ? <RefreshCcw className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            <span>{isUpdating ? 'Menyimpan Kurs...' : 'Simpan Pengaturan Kurs'}</span>
           </Button>
         </CardContent>
       </Card>

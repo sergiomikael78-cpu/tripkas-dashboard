@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button'
 import { useReports } from '@/hooks/useReports'
 import { useWorkspace } from '@/hooks/useWorkspace'
 import { useStockHistory } from '@/hooks/useStockHistory'
+import { 
+  Sparkles, Map, Store, Users, Layers, TrendingUp, BarChart3, Coins 
+} from 'lucide-react'
 import {
   ChartConfig,
   ChartContainer,
@@ -15,7 +18,7 @@ import {
   ChartLegend,
   ChartLegendContent
 } from "@/components/ui/chart"
-import { Bar, BarChart, Line, LineChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts"
+import { Bar, BarChart, Line, LineChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
 type Tab = 'trip' | 'supplier' | 'customer' | 'stock'
 
@@ -60,27 +63,36 @@ export default function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Laporan</h1>
-        <p className="text-sm text-muted-foreground mt-1">Analisis bisnis per dimensi.</p>
+      {/* Header Section */}
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-foreground via-foreground to-amber-500/80 bg-clip-text text-transparent">
+            Laporan & Analisis Bisnis
+          </h1>
+          <Sparkles className="h-4 w-4 text-amber-500 animate-pulse-subtle" />
+        </div>
+        <p className="text-muted-foreground text-xs sm:text-sm">
+          Analisis perbandingan per trip, performa supplier, kontribusi pelanggan, dan tren pergerakan stok.
+        </p>
       </div>
 
       {/* Daily Currency Summary */}
       {dailyCurrencyReport.data && dailyCurrencyReport.data.some((c: any) => c.total > 0) && (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {dailyCurrencyReport.data.filter((c: any) => c.total > 0).map((curr: any) => (
-            <Card key={curr.currency} className="border-emerald-200 bg-emerald-50/30 dark:border-emerald-900/50 dark:bg-emerald-950/20">
-              <CardContent className="pt-4 pb-3 flex items-center justify-between">
+            <Card key={curr.currency} className="relative overflow-hidden border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 via-card to-card dark:border-emerald-500/30 shadow-md">
+              <div className="absolute top-0 left-0 bottom-0 w-1 bg-gradient-to-b from-emerald-400 to-teal-600" />
+              <CardContent className="pt-4 pb-4 pl-5 flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-medium text-emerald-800 dark:text-emerald-400 uppercase tracking-wide">
-                    Uang Masuk Hari Ini ({curr.currency})
+                  <p className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+                    Penerimaan Cash Hari Ini ({curr.currency})
                   </p>
-                  <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-500 mt-1">
-                    {curr.total.toLocaleString('en-US')} <span className="text-sm font-normal">{curr.currency}</span>
+                  <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-0.5 tabular-nums tracking-tight">
+                    {curr.total.toLocaleString('en-US')} <span className="text-xs font-semibold text-muted-foreground">{curr.currency}</span>
                   </p>
                 </div>
-                <div className="h-10 w-10 bg-emerald-100 dark:bg-emerald-900/50 rounded-full flex items-center justify-center shrink-0">
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold text-lg">{curr.currency === 'KHR' ? '៛' : '$'}</span>
+                <div className="h-10 w-10 bg-emerald-500/20 text-emerald-500 border border-emerald-500/30 rounded-xl flex items-center justify-center shrink-0">
+                  <span className="font-bold text-lg">{curr.currency === 'KHR' ? '៛' : '$'}</span>
                 </div>
               </CardContent>
             </Card>
@@ -88,34 +100,53 @@ export default function ReportsPage() {
         </div>
       )}
 
-      {/* Tab Buttons */}
-      <div className="flex gap-2 flex-wrap pt-2">
-        {(['trip', 'supplier', 'customer', 'stock'] as Tab[]).map((tab) => (
-          <Button
-            key={tab}
-            variant={activeTab === tab ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab === 'trip' ? 'Per Trip' : tab === 'supplier' ? 'Per Supplier' : tab === 'customer' ? 'Per Customer' : 'Pergerakan Stok'}
-          </Button>
-        ))}
+      {/* Tab Nav Buttons */}
+      <div className="flex gap-2 flex-wrap p-1 rounded-2xl bg-muted/50 border border-border/40 dark:border-white/5 max-w-fit">
+        {(['trip', 'supplier', 'customer', 'stock'] as Tab[]).map((tab) => {
+          const isActive = activeTab === tab
+          return (
+            <Button
+              key={tab}
+              variant={isActive ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setActiveTab(tab)}
+              className={`rounded-xl text-xs font-semibold px-4 transition-all duration-200 ${
+                isActive ? "shadow-md shadow-amber-500/20" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {tab === 'trip' && <Map className="mr-1.5 h-3.5 w-3.5" />}
+              {tab === 'supplier' && <Store className="mr-1.5 h-3.5 w-3.5" />}
+              {tab === 'customer' && <Users className="mr-1.5 h-3.5 w-3.5" />}
+              {tab === 'stock' && <Layers className="mr-1.5 h-3.5 w-3.5" />}
+              {tab === 'trip' ? 'Per Trip' : tab === 'supplier' ? 'Per Supplier' : tab === 'customer' ? 'Per Pelanggan' : 'Pergerakan Stok'}
+            </Button>
+          )
+        })}
       </div>
 
       {/* TAB: Per Trip */}
       {activeTab === 'trip' && (
         <div className="space-y-6">
           {tripReport.isPending ? (
-            <p>Memuat laporan trip...</p>
+            <div className="space-y-4">
+              <Card className="border border-border/60 dark:border-white/10"><CardContent className="h-64 shimmer" /></Card>
+            </div>
           ) : !tripReport.data || tripReport.data.length === 0 ? (
-            <p className="text-muted-foreground">Belum ada data trip.</p>
+            <Card className="border-dashed border-border/80 dark:border-white/10 bg-card/40 py-8 text-center">
+              <CardContent className="text-xs text-muted-foreground font-medium">
+                Belum ada data trip terdaftar.
+              </CardContent>
+            </Card>
           ) : (
             <>
               {canSeeFinancials && tripReport.data.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Perbandingan Trip</CardTitle>
-                    <CardDescription>Profit dan Penjualan per Trip</CardDescription>
+                <Card className="border border-border/70 dark:border-white/10 bg-card/80 backdrop-blur-md shadow-md">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base font-bold flex items-center gap-2">
+                      <BarChart3 className="h-4 w-4 text-amber-500" />
+                      <span>Grafik Perbandingan Trip</span>
+                    </CardTitle>
+                    <CardDescription className="text-xs">Omset Penjualan vs Profit Bersih per Trip</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <ChartContainer config={tripChartConfig} className="h-[300px] w-full">
@@ -143,46 +174,46 @@ export default function ReportsPage() {
                 </Card>
               )}
               
-              <div className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2">
                 {tripReport.data.map((trip: any) => (
-                  <Card key={trip.id}>
-                    <CardHeader className="pb-2">
-                      <CardTitle className="flex justify-between items-center text-lg">
-                        <span>{trip.code}</span>
-                        <Badge variant={trip.status === 'running' ? 'default' : 'secondary'}>
+                  <Card key={trip.id} className="hover:border-amber-500/30 transition-all duration-300">
+                    <CardHeader className="pb-3 pt-5 pl-5">
+                      <CardTitle className="flex justify-between items-center text-base">
+                        <span className="font-bold text-lg tracking-tight text-foreground">{trip.code}</span>
+                        <Badge variant={trip.status === 'running' ? 'default' : 'secondary'} className="text-[10px] px-2.5 py-0.5">
                           {trip.status === 'running' ? 'Berjalan' : 'Selesai'}
                         </Badge>
                       </CardTitle>
                       <p className="text-xs text-muted-foreground">
-                        {new Date(trip.start_date).toLocaleDateString('id-ID')}
-                        {trip.end_date ? ` — ${new Date(trip.end_date).toLocaleDateString('id-ID')}` : ' — Sekarang'}
+                        Periode: {new Date(trip.start_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        {trip.end_date ? ` — ${new Date(trip.end_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}` : ' — Sekarang'}
                       </p>
                     </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-2 gap-3 text-sm">
+                    <CardContent className="pl-5 pb-5 pt-1">
+                      <div className="grid grid-cols-2 gap-3 text-xs p-3 rounded-xl bg-muted/40 border border-border/40 dark:border-white/5">
                         {canSeeFinancials && (
                           <div>
-                            <p className="text-muted-foreground text-xs">Modal Masuk</p>
-                            <p className="font-semibold tabular-nums">{fmt(trip.totalPurchase)}</p>
+                            <p className="text-muted-foreground text-[11px] font-medium">Modal Restok</p>
+                            <p className="font-bold text-foreground tabular-nums mt-0.5">{fmt(trip.totalPurchase)}</p>
                           </div>
                         )}
                         <div>
-                          <p className="text-muted-foreground text-xs">Total Penjualan</p>
-                          <p className="font-semibold tabular-nums">{fmt(trip.totalSales)}</p>
+                          <p className="text-muted-foreground text-[11px] font-medium">Total Penjualan</p>
+                          <p className="font-bold text-foreground tabular-nums mt-0.5">{fmt(trip.totalSales)}</p>
                         </div>
                         {canSeeFinancials && (
                           <>
                             <div>
-                              <p className="text-muted-foreground text-xs">Profit Kotor</p>
-                              <p className="font-semibold text-green-600 tabular-nums">{fmt(trip.totalProfit)}</p>
+                              <p className="text-muted-foreground text-[11px] font-medium">Profit Kotor</p>
+                              <p className="font-bold text-emerald-500 tabular-nums mt-0.5">{fmt(trip.totalProfit)}</p>
                             </div>
                             <div>
-                              <p className="text-muted-foreground text-xs">Pengeluaran Trip</p>
-                              <p className="font-semibold text-red-500 tabular-nums">{fmt(trip.totalExpenses)}</p>
+                              <p className="text-muted-foreground text-[11px] font-medium">Pengeluaran Trip</p>
+                              <p className="font-bold text-rose-500 tabular-nums mt-0.5">{fmt(trip.totalExpenses)}</p>
                             </div>
-                            <div className="col-span-2 border-t pt-2 mt-1">
-                              <p className="text-muted-foreground text-xs">Profit Bersih Trip</p>
-                              <p className={`text-lg font-bold tabular-nums ${trip.netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            <div className="col-span-2 border-t border-border/40 dark:border-white/5 pt-2 mt-1 flex justify-between items-center">
+                              <p className="text-muted-foreground text-xs font-semibold">Profit Bersih Trip:</p>
+                              <p className={`text-base font-bold tabular-nums ${trip.netProfit >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
                                 {fmt(trip.netProfit)}
                               </p>
                             </div>
@@ -202,16 +233,24 @@ export default function ReportsPage() {
       {activeTab === 'supplier' && (
         <div className="space-y-6">
           {supplierReport.isPending ? (
-            <p>Memuat laporan supplier...</p>
+            <div className="space-y-4">
+              <Card className="border border-border/60 dark:border-white/10"><CardContent className="h-64 shimmer" /></Card>
+            </div>
           ) : !supplierReport.data || supplierReport.data.length === 0 ? (
-            <p className="text-muted-foreground">Belum ada data supplier.</p>
+            <Card className="border-dashed border-border/80 dark:border-white/10 bg-card/40 py-8 text-center">
+              <CardContent className="text-xs text-muted-foreground font-medium">
+                Belum ada data transaksi supplier.
+              </CardContent>
+            </Card>
           ) : (
             <>
               {canSeeFinancials && supplierReport.data.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Perbandingan Supplier</CardTitle>
-                    <CardDescription>Total Pembelian per Supplier</CardDescription>
+                <Card className="border border-border/70 dark:border-white/10 bg-card/80 backdrop-blur-md shadow-md">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base font-bold flex items-center gap-2">
+                      <Store className="h-4 w-4 text-amber-500" />
+                      <span>Volume Pembelian per Supplier</span>
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ChartContainer config={supplierChartConfig} className="h-[300px] w-full">
@@ -238,27 +277,27 @@ export default function ReportsPage() {
                 </Card>
               )}
 
-              <div className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {supplierReport.data.map((s: any) => (
-                  <Card key={s.id}>
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-lg">{s.name}</CardTitle>
+                  <Card key={s.id} className="hover:border-amber-500/30 transition-all duration-300">
+                    <CardHeader className="pb-2 pt-4 pl-4">
+                      <CardTitle className="text-base font-bold text-foreground">{s.name}</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-2 gap-3 text-sm">
+                    <CardContent className="pl-4 pb-4 pt-1">
+                      <div className="space-y-1.5 text-xs text-muted-foreground p-3 rounded-xl bg-muted/40 border border-border/30">
                         {canSeeFinancials && (
-                          <div>
-                            <p className="text-muted-foreground text-xs">Total Pembelian</p>
-                            <p className="font-semibold tabular-nums">{fmt(s.totalPurchase)}</p>
+                          <div className="flex justify-between">
+                            <span>Total Restok:</span>
+                            <span className="font-bold text-emerald-500 tabular-nums">{fmt(s.totalPurchase)}</span>
                           </div>
                         )}
-                        <div>
-                          <p className="text-muted-foreground text-xs">Total Qty Dibeli</p>
-                          <p className="font-semibold tabular-nums">{s.totalQty}</p>
+                        <div className="flex justify-between">
+                          <span>Total Qty Unit:</span>
+                          <span className="font-semibold text-foreground tabular-nums">{s.totalQty}</span>
                         </div>
-                        <div>
-                          <p className="text-muted-foreground text-xs">Jumlah Transaksi</p>
-                          <p className="font-semibold tabular-nums">{s.txCount}</p>
+                        <div className="flex justify-between">
+                          <span>Jumlah Transaksi:</span>
+                          <span className="font-semibold text-foreground tabular-nums">{s.txCount} kali</span>
                         </div>
                       </div>
                     </CardContent>
@@ -272,41 +311,50 @@ export default function ReportsPage() {
 
       {/* TAB: Per Customer */}
       {activeTab === 'customer' && (
-        <div className="space-y-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {customerReport.isPending ? (
-            <p>Memuat laporan pelanggan...</p>
+            <>
+              {[...Array(3)].map((_, i) => (
+                <Card key={i} className="border border-border/60 dark:border-white/10"><CardContent className="h-32 shimmer" /></Card>
+              ))}
+            </>
           ) : !customerReport.data || customerReport.data.length === 0 ? (
-            <p className="text-muted-foreground">Belum ada data pelanggan.</p>
+            <Card className="col-span-full border-dashed border-border/80 dark:border-white/10 bg-card/40 py-8 text-center">
+              <CardContent className="text-xs text-muted-foreground font-medium">
+                Belum ada data kontribusi pelanggan.
+              </CardContent>
+            </Card>
           ) : (
             customerReport.data.map((c: any) => (
-              <Card key={c.id}>
-                <CardHeader className="pb-2">
-                  <CardTitle className="flex justify-between items-center text-lg">
-                    <span>{c.name}</span>
-                    <Badge variant="outline">{c.type === 'warung' ? 'Warung' : 'Teman'}</Badge>
+              <Card key={c.id} className="hover:border-amber-500/30 transition-all duration-300">
+                <CardHeader className="pb-2 pt-4 pl-4">
+                  <CardTitle className="flex justify-between items-center text-base font-bold">
+                    <span className="text-foreground">{c.name}</span>
+                    <Badge variant="outline" className="text-[10px] uppercase font-semibold">
+                      {c.type === 'warung' ? 'Warung' : 'Grosir'}
+                    </Badge>
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div>
-                      <p className="text-muted-foreground text-xs">Total Pembelian</p>
-                      <p className="font-semibold tabular-nums">{fmt(c.totalSales)}</p>
+                <CardContent className="pl-4 pb-4 pt-1">
+                  <div className="space-y-1.5 text-xs text-muted-foreground p-3 rounded-xl bg-muted/40 border border-border/30">
+                    <div className="flex justify-between">
+                      <span>Total Penjualan:</span>
+                      <span className="font-bold text-foreground tabular-nums">{fmt(c.totalSales)}</span>
                     </div>
-                    <div>
-                      <p className="text-muted-foreground text-xs">Jumlah Transaksi</p>
-                      <p className="font-semibold tabular-nums">{c.txCount}</p>
+                    <div className="flex justify-between">
+                      <span>Jumlah Transaksi:</span>
+                      <span className="font-semibold text-foreground tabular-nums">{c.txCount} transaksi</span>
                     </div>
                     {canSeeFinancials && (
-                      <div>
-                        <p className="text-muted-foreground text-xs">Profit dari Customer</p>
-                        <p className="font-semibold text-green-600 tabular-nums">{fmt(c.totalProfit)}</p>
+                      <div className="flex justify-between pt-1 border-t border-border/30">
+                        <span>Margin Kotor:</span>
+                        <span className="font-bold text-emerald-500 tabular-nums">{fmt(c.totalProfit)}</span>
                       </div>
                     )}
                     {c.piutangCount > 0 && (
-                      <div>
-                        <p className="text-muted-foreground text-xs">Piutang</p>
-                        <p className="font-semibold text-amber-600 tabular-nums">{fmt(c.piutangAmount)}</p>
-                        <p className="text-xs text-amber-500 tabular-nums">{c.piutangCount} belum lunas</p>
+                      <div className="flex justify-between text-rose-500 pt-1 border-t border-rose-500/20 font-semibold">
+                        <span>Sisa Piutang:</span>
+                        <span className="tabular-nums">{fmt(c.piutangAmount)} ({c.piutangCount} transaksi)</span>
                       </div>
                     )}
                   </div>
@@ -316,18 +364,25 @@ export default function ReportsPage() {
           )}
         </div>
       )}
+
       {/* TAB: Pergerakan Stok */}
       {activeTab === 'stock' && (
         <div className="space-y-6">
           {isStockLoading ? (
-            <p>Memuat riwayat stok...</p>
+            <Card className="border border-border/60 dark:border-white/10"><CardContent className="h-64 shimmer" /></Card>
           ) : !stockHistory || stockHistory.length === 0 ? (
-            <p className="text-muted-foreground">Belum ada riwayat pergerakan stok.</p>
+            <Card className="border-dashed border-border/80 dark:border-white/10 bg-card/40 py-8 text-center">
+              <CardContent className="text-xs text-muted-foreground font-medium">
+                Belum ada data tren pergerakan stok.
+              </CardContent>
+            </Card>
           ) : (
-            <Card>
-              <CardHeader>
-                <CardTitle>Riwayat Pergerakan Stok</CardTitle>
-                <CardDescription>Total stok masuk vs keluar harian</CardDescription>
+            <Card className="border border-border/70 dark:border-white/10 bg-card/80 backdrop-blur-md shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base font-bold flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4 text-amber-500" />
+                  <span>Tren Masuk vs Keluar Stok Harian</span>
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <ChartContainer config={stockChartConfig} className="h-[350px] w-full">
