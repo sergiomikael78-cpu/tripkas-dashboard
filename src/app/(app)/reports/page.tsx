@@ -133,7 +133,7 @@ export default function ReportsPage() {
                           axisLine={false}
                           width={80}
                         />
-                        <ChartTooltip content={<ChartTooltipContent formatter={(val: any) => fmt(val as number)} />} />
+                        <ChartTooltip content={<ChartTooltipContent formatter={(val) => (val !== undefined ? fmt(Number(val)) : "")} />} />
                         <ChartLegend content={<ChartLegendContent />} />
                         <Bar dataKey="totalSales" fill="var(--color-totalSales)" radius={[4, 4, 0, 0]} />
                         <Bar dataKey="netProfit" fill="var(--color-netProfit)" radius={[4, 4, 0, 0]} />
@@ -230,7 +230,7 @@ export default function ReportsPage() {
                           axisLine={false}
                           width={100}
                         />
-                        <ChartTooltip content={<ChartTooltipContent formatter={(val: number) => fmt(val)} />} />
+                        <ChartTooltip content={<ChartTooltipContent formatter={(val) => (val !== undefined ? fmt(Number(val)) : "")} />} />
                         <Bar dataKey="totalPurchase" fill="var(--color-totalPurchase)" radius={[0, 4, 4, 0]} />
                       </BarChart>
                     </ChartContainer>
