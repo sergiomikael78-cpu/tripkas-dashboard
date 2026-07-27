@@ -73,7 +73,7 @@ export function BottomNav() {
   const isMenuPathActive = !isMainPath && pathname !== '/'
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border/60 dark:border-white/10 bg-card/85 backdrop-blur-xl md:hidden shadow-lg shadow-black/20">
       <div className="flex justify-around items-center h-16 px-2">
         {mainNavItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href))
@@ -83,14 +83,14 @@ export function BottomNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                "relative flex flex-col items-center justify-center w-full h-full space-y-1 text-muted-foreground hover:text-foreground transition-all duration-300",
-                isActive ? "text-primary" : ""
+                "relative flex flex-col items-center justify-center w-full h-full space-y-1 text-muted-foreground hover:text-foreground transition-all duration-300 active:scale-95",
+                isActive ? "text-amber-500 font-semibold" : ""
               )}
             >
               {isActive && (
-                <span className="absolute top-0 w-8 h-1 bg-primary rounded-b-md transition-all duration-300 animate-in slide-in-from-top-2" />
+                <span className="absolute top-0 w-8 h-1 bg-gradient-to-r from-amber-400 to-amber-600 rounded-b-full transition-all duration-300 shadow-md shadow-amber-500/50 animate-in slide-in-from-top-2" />
               )}
-              <Icon className={cn("h-5 w-5 transition-transform duration-300", isActive && "-translate-y-0.5 scale-110")} />
+              <Icon className={cn("h-5 w-5 transition-transform duration-300", isActive && "-translate-y-0.5 scale-110 text-amber-500")} />
               <span className="text-[10px] font-medium">{item.name}</span>
             </Link>
           )
@@ -101,21 +101,21 @@ export function BottomNav() {
             render={
               <button
                 className={cn(
-                  "relative flex flex-col items-center justify-center w-full h-full space-y-1 text-muted-foreground hover:text-foreground transition-all duration-300 outline-none",
-                  isMenuPathActive ? "text-primary" : ""
+                  "relative flex flex-col items-center justify-center w-full h-full space-y-1 text-muted-foreground hover:text-foreground transition-all duration-300 active:scale-95 outline-none",
+                  isMenuPathActive ? "text-amber-500 font-semibold" : ""
                 )}
               />
             }
           >
             {isMenuPathActive && (
-              <span className="absolute top-0 w-8 h-1 bg-primary rounded-b-md transition-all duration-300 animate-in slide-in-from-top-2" />
+              <span className="absolute top-0 w-8 h-1 bg-gradient-to-r from-amber-400 to-amber-600 rounded-b-full transition-all duration-300 shadow-md shadow-amber-500/50 animate-in slide-in-from-top-2" />
             )}
-            <Menu className={cn("h-5 w-5 transition-transform duration-300", isMenuPathActive && "-translate-y-0.5 scale-110")} />
+            <Menu className={cn("h-5 w-5 transition-transform duration-300", isMenuPathActive && "-translate-y-0.5 scale-110 text-amber-500")} />
             <span className="text-[10px] font-medium">Menu</span>
           </DrawerTrigger>
-          <DrawerContent className="max-h-[85vh]">
-            <DrawerHeader className="border-b pb-4">
-              <DrawerTitle className="text-left">Semua Menu</DrawerTitle>
+          <DrawerContent className="max-h-[85vh] bg-card/95 backdrop-blur-xl border-t border-white/10">
+            <DrawerHeader className="border-b border-border/60 dark:border-white/10 pb-4">
+              <DrawerTitle className="text-left bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent">Semua Menu Navigasi</DrawerTitle>
             </DrawerHeader>
             <div className="overflow-y-auto p-4 space-y-6">
               {menuGroups.map((group, idx) => {
@@ -138,10 +138,10 @@ export function BottomNav() {
 
                 return (
                 <div key={idx} className="space-y-3">
-                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <h4 className="text-xs font-bold text-muted-foreground/70 uppercase tracking-wider">
                     {group.title}
                   </h4>
-                  <div className="grid grid-cols-4 gap-4">
+                  <div className="grid grid-cols-4 gap-3">
                     {filteredItems.map((item) => {
                       const isActive = pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href))
                       const Icon = item.icon
@@ -151,15 +151,15 @@ export function BottomNav() {
                           href={item.href}
                           onClick={() => setOpen(false)}
                           className={cn(
-                            "flex flex-col items-center gap-2 p-2 rounded-xl transition-all",
+                            "flex flex-col items-center gap-2 p-2.5 rounded-2xl transition-all duration-200 active:scale-95 border",
                             isActive 
-                              ? "bg-primary/10 text-primary" 
-                              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                              ? "bg-amber-500/15 border-amber-500/30 text-amber-500 font-semibold dark:bg-amber-500/20 dark:border-amber-500/40" 
+                              : "border-transparent text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                           )}
                         >
                           <div className={cn(
-                            "p-2 rounded-full",
-                            isActive ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                            "p-2 rounded-xl transition-transform duration-200",
+                            isActive ? "bg-amber-500 text-slate-950 shadow-sm shadow-amber-500/30" : "bg-muted/80 text-muted-foreground"
                           )}>
                             <Icon className="h-5 w-5" />
                           </div>
