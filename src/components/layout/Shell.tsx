@@ -62,7 +62,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </div>
           <div className="flex flex-col">
             <span className="text-base font-bold bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent leading-tight tracking-tight">DataRokok.SMJ</span>
-            <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider mt-0.5">Trading Multi-Trip</span>
+            <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider mt-0.5">Dashboard Pencatatan</span>
           </div>
         </div>
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">

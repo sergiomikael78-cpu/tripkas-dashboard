@@ -38,7 +38,7 @@ export default function TripsPage() {
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-foreground via-foreground to-amber-500/80 bg-clip-text text-transparent">
-              Manajemen Trip Trading
+              Manajemen Trip
             </h1>
             <Sparkles className="h-4 w-4 text-amber-500 animate-pulse-subtle" />
           </div>

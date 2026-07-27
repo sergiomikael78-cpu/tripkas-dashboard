@@ -127,7 +127,7 @@ export default function DashboardPage() {
                     </p>
                   )}
                 </div>
-                <p className="text-[11px] text-muted-foreground font-medium mt-1">Omset bruto bulan ini</p>
+                <p className="text-[11px] text-muted-foreground font-medium mt-1">Total penjualan bulan ini</p>
               </CardContent>
             </Card>
 
