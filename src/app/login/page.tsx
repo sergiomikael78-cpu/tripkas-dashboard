@@ -94,7 +94,7 @@ export default function LoginPage() {
             </CardTitle>
             <CardDescription className="text-xs text-muted-foreground font-medium flex items-center justify-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
-              Sistem Pencatatan Trading Multi-Trip
+              Sistem Pencatatan Penjualan Rokok
             </CardDescription>
           </div>
         </CardHeader>
@@ -117,7 +117,7 @@ export default function LoginPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@datarokok.smj"
+                  placeholder="nama@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -147,17 +147,17 @@ export default function LoginPage() {
             <div className="pt-2 space-y-2.5">
               <Button
                 type="submit"
-                className="w-full h-11 rounded-xl text-sm font-semibold shadow-lg shadow-amber-500/25 transition-all duration-300"
+                className="w-full h-11 rounded-xl text-sm font-bold shadow-lg shadow-amber-500/25 transition-all duration-300"
                 disabled={loading}
               >
                 {loading ? (
                   <div className="flex items-center justify-center gap-2">
                     <Loader2 className="h-4 w-4 animate-spin text-slate-950" />
-                    <span>Memverifikasi Akses...</span>
+                    <span>Masuk ke Sistem...</span>
                   </div>
                 ) : (
                   <div className="flex items-center justify-center gap-2">
-                    <span>Masuk (Login)</span>
+                    <span>Masuk ke Sistem</span>
                     <Sparkles className="h-4 w-4" />
                   </div>
                 )}
@@ -179,7 +179,7 @@ export default function LoginPage() {
           </form>
           
           <div className="mt-6 text-center text-[11px] text-muted-foreground/60">
-            &copy; 2026 DataRokok.SMJ • Enterprise Trading Platform
+            &copy; 2026 DataRokok.SMJ
           </div>
         </CardContent>
       </Card>

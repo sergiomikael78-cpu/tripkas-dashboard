@@ -146,7 +146,7 @@ export default function ReportsPage() {
                       <BarChart3 className="h-4 w-4 text-amber-500" />
                       <span>Grafik Perbandingan Trip</span>
                     </CardTitle>
-                    <CardDescription className="text-xs">Omset Penjualan vs Profit Bersih per Trip</CardDescription>
+                    <CardDescription className="text-xs">Total Penjualan vs Profit Bersih per Trip</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <ChartContainer config={tripChartConfig} className="h-[300px] w-full">

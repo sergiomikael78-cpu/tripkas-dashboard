@@ -184,7 +184,7 @@ export default function CreateSalePage() {
         </Button>
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Catat Penjualan</h1>
-          <p className="text-sm text-muted-foreground mt-1">Buat transaksi penjualan instan tanpa hambatan.</p>
+          <p className="text-sm text-muted-foreground mt-1">Buat transaksi penjualan baru.</p>
         </div>
       </div>
 

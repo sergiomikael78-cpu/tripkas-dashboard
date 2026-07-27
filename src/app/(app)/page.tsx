@@ -35,7 +35,7 @@ export default function DashboardPage() {
           <Sparkles className="h-4 w-4 text-amber-500 animate-pulse-subtle" />
         </div>
         <p className="text-muted-foreground text-xs sm:text-sm">
-          Ringkasan performa bisnis dan aktivitas trip trading Anda secara real-time.
+          Ringkasan performa bisnis dan aktivitas trip Anda secara real-time.
         </p>
       </div>
 
@@ -84,7 +84,7 @@ export default function DashboardPage() {
             <Card className="border-dashed border-border/80 dark:border-white/10 bg-card/40">
               <CardContent className="pt-5 pb-5 flex items-center justify-center gap-3 text-muted-foreground">
                 <Compass className="h-5 w-5 text-amber-500/70" />
-                <p className="text-xs sm:text-sm font-medium">Tidak ada trip aktif saat ini. Siap membuka trip trading berikutnya.</p>
+                <p className="text-xs sm:text-sm font-medium">Tidak ada trip aktif saat ini. Siap membuka trip berikutnya.</p>
               </CardContent>
             </Card>
           )}
