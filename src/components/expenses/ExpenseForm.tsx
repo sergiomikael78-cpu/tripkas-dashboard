@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { CurrencyInput } from '@/components/ui/currency-input'
+import { Coins, Calculator } from 'lucide-react'
 
 export function ExpenseForm({ 
   open, 
@@ -88,29 +89,29 @@ export function ExpenseForm({
     <ResponsiveFormSheet
       open={open}
       onOpenChange={onOpenChange}
-      title="Catat Pengeluaran"
-      description="Tambahkan catatan pengeluaran operasional atau trip baru."
+      title="Catat Pengeluaran Baru"
+      description="Tambahkan catatan biaya operasional harian atau beban trip."
     >
       <form onSubmit={handleSubmit} className="space-y-4 py-4">
         <div className="space-y-2">
-          <Label htmlFor="category">Kategori Pengeluaran</Label>
+          <Label htmlFor="category" className="text-xs font-semibold">Kategori Biaya</Label>
           <Select value={category} onValueChange={(value) => setCategory(value as ExpenseCategory)}>
-            <SelectTrigger>
+            <SelectTrigger className="h-10 rounded-xl">
               <SelectValue placeholder="Pilih Kategori" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="operasional_harian">Operasional Harian</SelectItem>
-              <SelectItem value="trip">Biaya Trip (Jalan/Bensin/dll)</SelectItem>
-              <SelectItem value="lainnya">Lainnya</SelectItem>
+              <SelectItem value="trip">Biaya Trip (Jalan/Bensin/Makan)</SelectItem>
+              <SelectItem value="lainnya">Pengeluaran Lainnya</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         {category === 'trip' && (
           <div className="space-y-2">
-            <Label htmlFor="trip">Pilih Trip Aktif</Label>
+            <Label htmlFor="trip" className="text-xs font-semibold">Pilih Trip Aktif</Label>
             <Select value={tripId} onValueChange={(val) => setTripId(val as string)}>
-              <SelectTrigger>
+              <SelectTrigger className="h-10 rounded-xl">
                 <SelectValue placeholder="Pilih Trip" />
               </SelectTrigger>
               <SelectContent>
@@ -129,9 +130,9 @@ export function ExpenseForm({
         )}
 
         <div className="space-y-2">
-          <Label htmlFor="currency">Mata Uang</Label>
+          <Label htmlFor="currency" className="text-xs font-semibold">Mata Uang Pengeluaran</Label>
           <Select value={currency} onValueChange={(val) => setCurrency(val || 'IDR')}>
-            <SelectTrigger>
+            <SelectTrigger className="h-10 rounded-xl">
               <SelectValue placeholder="Pilih Mata Uang" />
             </SelectTrigger>
             <SelectContent>
@@ -143,7 +144,7 @@ export function ExpenseForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="amount">Nominal ({currency})</Label>
+          <Label htmlFor="amount" className="text-xs font-semibold">Nominal Biaya ({currency})</Label>
           <CurrencyInput 
             id="amount" 
             value={amount}
@@ -151,40 +152,46 @@ export function ExpenseForm({
             placeholder="Misal: 150000"
             required
             min="1"
+            className="h-10 rounded-xl font-bold tabular-nums text-rose-500"
           />
         </div>
 
-        {currency !== 'IDR' && amount && (
-          <div className="p-3 bg-green-50/50 border border-green-200 rounded-md text-sm text-green-800 space-y-1">
-            <p className="font-semibold text-green-900">Estimasi Rupiah:</p>
-            <p>
+        {currency !== 'IDR' && Boolean(amount) && (
+          <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-600 dark:text-emerald-400 space-y-1">
+            <div className="flex items-center gap-1.5 font-bold">
+              <Calculator className="h-4 w-4" />
+              <span>Estimasi Konversi Rupiah:</span>
+            </div>
+            <p className="text-base font-bold tabular-nums">
               Rp {Math.round(idrAmount).toLocaleString('id-ID')}
             </p>
-            <p className="text-[10px] opacity-70">
-              *Diambil dari kurs aktif (USD: Rp{usdRate.toLocaleString()}, KHR: {khrRate})
+            <p className="text-[10px] opacity-75">
+              *Diambil dari kurs aktif ($1: Rp{usdRate.toLocaleString()}, KHR: {khrRate})
             </p>
           </div>
         )}
 
         <div className="space-y-2">
-          <Label htmlFor="expenseDate">Tanggal</Label>
+          <Label htmlFor="expenseDate" className="text-xs font-semibold">Tanggal Transaksi</Label>
           <Input 
             id="expenseDate" 
             type="date"
             value={expenseDate}
             onChange={(e) => setExpenseDate(e.target.value)}
             required
+            className="h-10 rounded-xl"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="notes">Catatan (Opsional)</Label>
+          <Label htmlFor="notes" className="text-xs font-semibold">Catatan / Keterangan (Opsional)</Label>
           <Textarea
             id="notes"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            placeholder="Beli bensin, bayar listrik, dll..."
+            placeholder="Beli bensin, bayar makan driver, tol, dll..."
             rows={3}
+            className="rounded-xl"
           />
         </div>
 
@@ -194,11 +201,12 @@ export function ExpenseForm({
             variant="outline" 
             onClick={() => onOpenChange(false)}
             disabled={createExpense.isPending}
+            className="rounded-xl"
           >
             Batal
           </Button>
-          <Button type="submit" disabled={createExpense.isPending}>
-            {createExpense.isPending ? 'Menyimpan...' : 'Simpan'}
+          <Button type="submit" disabled={createExpense.isPending} className="rounded-xl font-semibold shadow-md shadow-amber-500/20">
+            {createExpense.isPending ? 'Menyimpan...' : 'Simpan Pengeluaran'}
           </Button>
         </div>
       </form>

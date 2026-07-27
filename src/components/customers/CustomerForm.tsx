@@ -60,59 +60,66 @@ export function CustomerForm({ open, onOpenChange, customerToEdit }: CustomerFor
     <ResponsiveFormSheet
       open={open}
       onOpenChange={onOpenChange}
-      title={customerToEdit ? "Edit Pelanggan" : "Tambah Pelanggan"}
-      description="Masukkan detail pelanggan di bawah ini."
+      title={customerToEdit ? "Edit Profile Pelanggan" : "Tambah Pelanggan Baru"}
+      description="Masukkan profil kontak dan kategori pelanggan warung / grosir."
     >
       <form onSubmit={handleSubmit} className="space-y-4 pt-4">
         <div className="space-y-2">
-          <Label htmlFor="name">Nama Pelanggan</Label>
+          <Label htmlFor="name" className="text-xs font-semibold">Nama Pelanggan / Toko</Label>
           <Input 
             id="name" 
-            placeholder="Warung XYZ / Pak Budi" 
+            placeholder="Warung Berkah / Toko Pak Budi" 
             value={name} 
             onChange={(e) => setName(e.target.value)} 
             required 
+            className="h-10 rounded-xl"
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="type">Tipe Pelanggan</Label>
+          <Label htmlFor="type" className="text-xs font-semibold">Kategori Pelanggan</Label>
           <Select value={type} onValueChange={(val) => setType(val as CustomerType)}>
-            <SelectTrigger>
+            <SelectTrigger className="h-10 rounded-xl">
               <SelectValue placeholder="Pilih Tipe" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="warung">Warung</SelectItem>
-              <SelectItem value="teman">Teman (Grosir/Ecer)</SelectItem>
+              <SelectItem value="warung">Warung / Toko Kelontong</SelectItem>
+              <SelectItem value="teman">Grosir / Pembeli Eceran</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="contact">Kontak (Opsional)</Label>
+          <Label htmlFor="contact" className="text-xs font-semibold">No HP / WhatsApp (Opsional)</Label>
           <Input 
             id="contact" 
-            placeholder="No HP" 
+            placeholder="081234567890" 
             value={contact} 
             onChange={(e) => setContact(e.target.value)} 
+            className="h-10 rounded-xl"
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="notes">Catatan (Opsional)</Label>
+          <Label htmlFor="notes" className="text-xs font-semibold">Alamat / Catatan (Opsional)</Label>
           <Input 
             id="notes" 
-            placeholder="Keterangan lain..." 
+            placeholder="Alamat toko atau batasan piutang..." 
             value={notes} 
             onChange={(e) => setNotes(e.target.value)} 
+            className="h-10 rounded-xl"
           />
         </div>
-        <div className="pt-2 flex flex-col gap-2">
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Menyimpan..." : "Simpan"}
+        <div className="pt-3 flex flex-col gap-2.5">
+          <Button type="submit" className="w-full h-11 rounded-xl font-bold shadow-md shadow-amber-500/20" disabled={isSubmitting}>
+            {isSubmitting ? "Menyimpan Data..." : "Simpan Pelanggan"}
           </Button>
           {customerToEdit && (
             <Button 
               type="button" 
-              variant="destructive"
-              className="w-full"
+              variant="outline"
+              className={`w-full h-10 rounded-xl font-bold ${
+                customerToEdit.is_active 
+                  ? "border-rose-500/40 text-rose-500 hover:bg-rose-500/10" 
+                  : "border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10"
+              }`}
               disabled={isSubmitting}
               onClick={async () => {
                 const confirmMsg = customerToEdit.is_active 
@@ -131,7 +138,7 @@ export function CustomerForm({ open, onOpenChange, customerToEdit }: CustomerFor
                 }
               }}
             >
-              {customerToEdit.is_active ? "Nonaktifkan Pelanggan" : "Aktifkan Pelanggan"}
+              {customerToEdit.is_active ? "Nonaktifkan Pelanggan Ini" : "Aktifkan Kembali Pelanggan"}
             </Button>
           )}
         </div>

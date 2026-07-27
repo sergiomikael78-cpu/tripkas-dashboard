@@ -51,47 +51,54 @@ export function SupplierForm({ open, onOpenChange, supplierToEdit }: SupplierFor
     <ResponsiveFormSheet
       open={open}
       onOpenChange={onOpenChange}
-      title={supplierToEdit ? "Edit Supplier" : "Tambah Supplier"}
-      description="Masukkan data supplier di bawah ini."
+      title={supplierToEdit ? "Edit Data Supplier" : "Tambah Supplier Baru"}
+      description="Masukkan profil kontak dan alamat mitra supplier rokok."
     >
       <form onSubmit={handleSubmit} className="space-y-4 pt-4">
         <div className="space-y-2">
-          <Label htmlFor="name">Nama Supplier</Label>
+          <Label htmlFor="name" className="text-xs font-semibold">Nama Supplier / PT</Label>
           <Input 
             id="name" 
-            placeholder="PT ABCD / Budi" 
+            placeholder="PT Sampoerna / Pabrik Budi" 
             value={name} 
             onChange={(e) => setName(e.target.value)} 
             required 
+            className="h-10 rounded-xl"
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="contact">Kontak (Opsional)</Label>
+          <Label htmlFor="contact" className="text-xs font-semibold">No HP / WhatsApp (Opsional)</Label>
           <Input 
             id="contact" 
-            placeholder="No HP / Email" 
+            placeholder="081234567890 / email@contoh.com" 
             value={contact} 
             onChange={(e) => setContact(e.target.value)} 
+            className="h-10 rounded-xl"
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="notes">Catatan (Opsional)</Label>
+          <Label htmlFor="notes" className="text-xs font-semibold">Alamat / Catatan (Opsional)</Label>
           <Input 
             id="notes" 
-            placeholder="Alamat atau keterangan lain..." 
+            placeholder="Alamat gudang supplier atau catatan khusus..." 
             value={notes} 
             onChange={(e) => setNotes(e.target.value)} 
+            className="h-10 rounded-xl"
           />
         </div>
-        <div className="pt-2 flex flex-col gap-2">
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Menyimpan..." : "Simpan"}
+        <div className="pt-3 flex flex-col gap-2.5">
+          <Button type="submit" className="w-full h-11 rounded-xl font-bold shadow-md shadow-amber-500/20" disabled={isSubmitting}>
+            {isSubmitting ? "Menyimpan Data..." : "Simpan Supplier"}
           </Button>
           {supplierToEdit && (
             <Button 
               type="button" 
-              variant="destructive"
-              className="w-full"
+              variant="outline"
+              className={`w-full h-10 rounded-xl font-bold ${
+                supplierToEdit.is_active 
+                  ? "border-rose-500/40 text-rose-500 hover:bg-rose-500/10" 
+                  : "border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10"
+              }`}
               disabled={isSubmitting}
               onClick={async () => {
                 const confirmMsg = supplierToEdit.is_active 
@@ -110,7 +117,7 @@ export function SupplierForm({ open, onOpenChange, supplierToEdit }: SupplierFor
                 }
               }}
             >
-              {supplierToEdit.is_active ? "Nonaktifkan Supplier" : "Aktifkan Supplier"}
+              {supplierToEdit.is_active ? "Nonaktifkan Supplier Ini" : "Aktifkan Kembali Supplier"}
             </Button>
           )}
         </div>

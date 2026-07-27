@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { ResponsiveFormSheet } from '@/components/ui/responsive-form-sheet'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-// Fallback to simple button if ui/button is missing/not used properly, but we have ui/button
 import { Button } from '@/components/ui/button'
 import { useTrips } from '@/hooks/useTrips'
 import { useWorkspace } from '@/hooks/useWorkspace'
@@ -17,8 +16,8 @@ interface TripFormProps {
 
 export function TripForm({ open, onOpenChange, tripToEdit }: TripFormProps) {
   const { createTrip, updateTrip } = useTrips()
-  const { data: workspace } = useWorkspace();
-  const role = workspace?.role;
+  const { data: workspace } = useWorkspace()
+  const role = workspace?.role
   
   const [code, setCode] = useState(tripToEdit?.code || '')
   // format date as YYYY-MM-DD for input type="date"
@@ -74,52 +73,59 @@ export function TripForm({ open, onOpenChange, tripToEdit }: TripFormProps) {
     <ResponsiveFormSheet
       open={open}
       onOpenChange={onOpenChange}
-      title={tripToEdit ? "Edit Trip" : "Buat Trip Baru"}
-      description="Masukkan detail trip di bawah ini."
+      title={tripToEdit ? "Edit Operasional Trip" : "Buka Trip Operasional Baru"}
+      description="Masukkan kode identifikasi dan tanggal pengiriman barang trip."
     >
       <form onSubmit={handleSubmit} className="space-y-4 pt-4">
         <div className="space-y-2">
-          <Label htmlFor="code">Kode Trip</Label>
+          <Label htmlFor="code" className="text-xs font-semibold">Kode Identifikasi Trip</Label>
           <Input 
             id="code" 
             placeholder="Contoh: TRP-2401" 
             value={code} 
             onChange={(e) => setCode(e.target.value)} 
             required 
+            className="h-10 rounded-xl font-bold uppercase tracking-wider"
           />
         </div>
+
         <div className="space-y-2">
-          <Label htmlFor="start_date">Tanggal Mulai</Label>
+          <Label htmlFor="start_date" className="text-xs font-semibold">Tanggal Mulai Trip</Label>
           <Input 
             id="start_date" 
             type="date" 
             value={startDate} 
             onChange={(e) => setStartDate(e.target.value)} 
             required 
+            className="h-10 rounded-xl"
           />
         </div>
+
         <div className="space-y-2">
-          <Label htmlFor="notes">Catatan (Opsional)</Label>
+          <Label htmlFor="notes" className="text-xs font-semibold">Catatan Operasional (Opsional)</Label>
           <Input 
             id="notes" 
-            placeholder="Keterangan trip..." 
+            placeholder="Keterangan Rute / Driver..." 
             value={notes} 
             onChange={(e) => setNotes(e.target.value)} 
+            className="h-10 rounded-xl"
           />
         </div>
-        <div className="pt-2 flex flex-col gap-2">
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Menyimpan..." : "Simpan"}
+
+        <div className="pt-3 flex flex-col gap-2.5">
+          <Button type="submit" className="w-full h-11 rounded-xl font-bold shadow-md shadow-amber-500/20" disabled={isSubmitting}>
+            {isSubmitting ? "Menyimpan Data..." : "Simpan Trip"}
           </Button>
+
           {tripToEdit && tripToEdit.status === 'running' && (role === 'owner' || role === 'admin') && (
             <Button 
               type="button" 
-              variant="secondary"
-              className="w-full bg-amber-100 text-amber-900 hover:bg-amber-200"
+              variant="outline"
+              className="w-full h-10 rounded-xl border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 font-bold"
               disabled={isSubmitting}
               onClick={handleCloseTrip}
             >
-              Tutup Trip (Selesai)
+              Tutup Trip Ini (Selesai Operasional)
             </Button>
           )}
         </div>
