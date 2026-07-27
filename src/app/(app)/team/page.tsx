@@ -313,18 +313,18 @@ export default function TeamPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Role Akses</Label>
+              <Label className="text-xs font-semibold">Role Akses</Label>
               <Select value={inviteRole} onValueChange={(val) => setInviteRole(val || 'partner')}>
                 <SelectTrigger className="h-10 rounded-xl">
-                  <SelectValue />
+                  <SelectValue placeholder="Pilih Role Akses" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="admin">Admin</SelectItem>
-                  <SelectItem value="partner">Partner</SelectItem>
-                  <SelectItem value="staff">Staff</SelectItem>
+                  <SelectItem value="admin">Admin (Akses Penuh Non-Tim)</SelectItem>
+                  <SelectItem value="partner">Partner (Input Transaksi)</SelectItem>
+                  <SelectItem value="staff">Staff (Kasir Penjualan Dasar)</SelectItem>
                 </SelectContent>
               </Select>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-[11px] text-muted-foreground mt-1">
                 Silakan rujuk ke Matriks Hak Akses untuk detail izin per role.
               </p>
             </div>
