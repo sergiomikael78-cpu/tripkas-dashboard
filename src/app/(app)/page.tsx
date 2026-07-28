@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useDashboardStats } from '@/hooks/useDashboardStats'
 import { useWorkspace } from '@/hooks/useWorkspace'
+import { useSettings } from '@/hooks/useSettings'
 import { 
   TrendingUp, 
   AlertTriangle, 
@@ -20,8 +21,15 @@ import {
 export default function DashboardPage() {
   const { data: stats, isLoading } = useDashboardStats()
   const { data: workspace } = useWorkspace()
+  const { settings } = useSettings()
 
-  const fmt = (n: number) => `Rp ${n.toLocaleString('id-ID')}`
+  const usdRate = settings?.usd_to_idr_rate || 16000
+  const khrRate = settings?.khr_to_usd_rate || 4000
+
+  const toKHR = (idr: number) => Math.round((idr / usdRate) * khrRate)
+  const fmtIDR = (n: number) => `Rp ${n.toLocaleString('id-ID')}`
+  const fmtKHR = (n: number) => `៛ ${toKHR(n).toLocaleString('en-US')}`
+
   const profitBersih = (stats?.profitBulanIni || 0) - (stats?.totalPengeluaranBulanIni || 0)
 
   return (
@@ -100,7 +108,7 @@ export default function DashboardPage() {
                     <TrendingUp className="h-4 w-4" />
                   </div>
                 </div>
-                <p className="text-xl sm:text-2xl font-bold text-emerald-500 tabular-nums tracking-tight">{fmt(stats?.profitBulanIni || 0)}</p>
+                <p className="text-xl sm:text-2xl font-bold text-emerald-500 tabular-nums tracking-tight">{fmtIDR(stats?.profitBulanIni || 0)}</p>
                 <p className="text-[11px] text-muted-foreground font-medium mt-1">Estimasi margin bulan ini</p>
               </CardContent>
             </Card>
@@ -115,17 +123,12 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <div className="space-y-0.5">
-                  <p className="text-xl sm:text-2xl font-bold text-foreground tabular-nums tracking-tight">{fmt(stats?.totalPenjualanBulanIni || 0)}</p>
-                  {(stats?.totalPenjualanBulanIniKHR || 0) > 0 && (
-                    <p className="text-xs font-semibold text-blue-500 tabular-nums">
-                      ( ៛ {(stats?.totalPenjualanBulanIniKHR || 0).toLocaleString('en-US')} )
-                    </p>
-                  )}
-                  {(stats?.totalPenjualanBulanIniUSD || 0) > 0 && (
-                    <p className="text-xs font-semibold text-blue-500 tabular-nums">
-                      ( $ {(stats?.totalPenjualanBulanIniUSD || 0).toLocaleString('en-US')} )
-                    </p>
-                  )}
+                  <p className="text-xl sm:text-2xl font-bold text-foreground tabular-nums tracking-tight">
+                    {fmtKHR(stats?.totalPenjualanBulanIni || 0)}
+                  </p>
+                  <p className="text-xs font-semibold text-muted-foreground/80 tabular-nums">
+                    ({fmtIDR(stats?.totalPenjualanBulanIni || 0)})
+                  </p>
                 </div>
                 <p className="text-[11px] text-muted-foreground font-medium mt-1">Total penjualan bulan ini</p>
               </CardContent>
@@ -140,7 +143,14 @@ export default function DashboardPage() {
                     <ArrowDownRight className="h-4 w-4" />
                   </div>
                 </div>
-                <p className="text-xl sm:text-2xl font-bold text-rose-500 tabular-nums tracking-tight">{fmt(stats?.totalPengeluaranBulanIni || 0)}</p>
+                <div className="space-y-0.5">
+                  <p className="text-xl sm:text-2xl font-bold text-rose-500 tabular-nums tracking-tight">
+                    {fmtKHR(stats?.totalPengeluaranBulanIni || 0)}
+                  </p>
+                  <p className="text-xs font-semibold text-rose-500/70 tabular-nums">
+                    ({fmtIDR(stats?.totalPengeluaranBulanIni || 0)})
+                  </p>
+                </div>
                 <p className="text-[11px] text-muted-foreground font-medium mt-1">Biaya operasional bulan ini</p>
               </CardContent>
             </Card>
@@ -155,7 +165,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <p className={`text-xl sm:text-2xl font-bold tabular-nums tracking-tight ${profitBersih >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
-                  {fmt(profitBersih)}
+                  {fmtIDR(profitBersih)}
                 </p>
                 <p className="text-[11px] text-muted-foreground font-medium mt-1">Profit Kotor − Pengeluaran</p>
               </CardContent>
@@ -170,9 +180,14 @@ export default function DashboardPage() {
                     <CreditCard className="h-4 w-4" />
                   </div>
                 </div>
-                <p className={`text-xl sm:text-2xl font-bold tabular-nums tracking-tight ${stats?.totalPiutang ? 'text-amber-500' : 'text-foreground'}`}>
-                  {fmt(stats?.totalPiutang || 0)}
-                </p>
+                <div className="space-y-0.5">
+                  <p className={`text-xl sm:text-2xl font-bold tabular-nums tracking-tight ${stats?.totalPiutang ? 'text-amber-500' : 'text-foreground'}`}>
+                    {fmtKHR(stats?.totalPiutang || 0)}
+                  </p>
+                  <p className="text-xs font-semibold text-amber-500/70 tabular-nums">
+                    ({fmtIDR(stats?.totalPiutang || 0)})
+                  </p>
+                </div>
                 <p className="text-[11px] text-muted-foreground font-medium mt-1">
                   {stats?.totalPiutangCount || 0} transaksi belum lunas
                 </p>
@@ -188,7 +203,14 @@ export default function DashboardPage() {
                     <Package className="h-4 w-4" />
                   </div>
                 </div>
-                <p className="text-xl sm:text-2xl font-bold text-foreground tabular-nums tracking-tight">{fmt(stats?.totalStokNilai || 0)}</p>
+                <div className="space-y-0.5">
+                  <p className="text-xl sm:text-2xl font-bold text-foreground tabular-nums tracking-tight">
+                    {fmtKHR(stats?.totalStokNilai || 0)}
+                  </p>
+                  <p className="text-xs font-semibold text-muted-foreground/80 tabular-nums">
+                    ({fmtIDR(stats?.totalStokNilai || 0)})
+                  </p>
+                </div>
                 <p className="text-[11px] text-muted-foreground font-medium mt-1">{stats?.totalProdukAktif || 0} varian produk aktif</p>
               </CardContent>
             </Card>
@@ -204,7 +226,7 @@ export default function DashboardPage() {
                 <div className="space-y-0.5">
                   <p className="text-sm font-bold text-amber-500">Perhatian: Piutang Penjualan Belum Lunas</p>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    Terdapat <span className="font-semibold text-foreground">{stats?.totalPiutangCount} transaksi</span> yang belum dilunasi dengan total tagihan <span className="font-semibold text-amber-500">{fmt(stats?.totalPiutang || 0)}</span>. Silakan periksa menu Penjualan.
+                    Terdapat <span className="font-semibold text-foreground">{stats?.totalPiutangCount} transaksi</span> yang belum dilunasi dengan total tagihan <span className="font-semibold text-amber-500">{fmtKHR(stats?.totalPiutang || 0)}</span>. Silakan periksa menu Penjualan.
                   </p>
                 </div>
               </CardContent>

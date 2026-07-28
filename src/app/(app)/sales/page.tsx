@@ -11,6 +11,7 @@ import { PaymentForm } from '@/components/sales/PaymentForm'
 import { LuxuryDeleteDialog } from '@/components/ui/luxury-delete-dialog'
 import { useSales } from '@/hooks/useSales'
 import { useWorkspace } from '@/hooks/useWorkspace'
+import { useSettings } from '@/hooks/useSettings'
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function SalesPage() {
@@ -20,7 +21,12 @@ export default function SalesPage() {
 
   const { sales, isLoading, isError, deleteSale } = useSales(monthFilter)
   const { data: workspace } = useWorkspace()
+  const { settings } = useSettings()
   const role = workspace?.role
+
+  const usdRate = settings?.usd_to_idr_rate || 16000
+  const khrRate = settings?.khr_to_usd_rate || 4000
+  const toKHR = (idr: number) => Math.round((idr / usdRate) * khrRate)
   
   // Payment state
   const [isPaymentFormOpen, setIsPaymentFormOpen] = useState(false)
@@ -197,14 +203,19 @@ export default function SalesPage() {
                     <div>
                       <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider block">Total Tagihan Penjualan</span>
                       {sale.payment_status === 'piutang' && sale.due_date && (
-                        <span className="text-[11px] text-rose-500 font-medium">
+                        <span className="text-[11px] text-rose-500 font-medium block">
                           Jatuh Tempo: {new Date(sale.due_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                         </span>
                       )}
                     </div>
-                    <span className="text-lg font-bold text-amber-600 dark:text-amber-400 tabular-nums">
-                      Rp {total.toLocaleString('id-ID')}
-                    </span>
+                    <div className="text-right">
+                      <span className="text-lg font-bold text-amber-600 dark:text-amber-400 tabular-nums block">
+                        ៛ {toKHR(total).toLocaleString('en-US')}
+                      </span>
+                      <span className="text-xs font-semibold text-muted-foreground/80 tabular-nums block">
+                        (Rp {total.toLocaleString('id-ID')})
+                      </span>
+                    </div>
                   </div>
 
                   {/* Items List Breakdown */}
