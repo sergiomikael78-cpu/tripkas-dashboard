@@ -71,13 +71,13 @@ export function PaymentForm({
           <div className="flex justify-between items-center text-muted-foreground pt-1 border-t border-border/30">
             <span>Total Tagihan Penjualan:</span>
             <span className="font-bold text-foreground tabular-nums text-sm">
-              Rp {totalAmount.toLocaleString('id-ID')}
+              KHR {totalAmount.toLocaleString('id-ID')}
             </span>
           </div>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="amount" className="text-xs font-semibold">Nominal Pembayaran (Rp)</Label>
+          <Label htmlFor="amount" className="text-xs font-semibold">Nominal Pembayaran (KHR)</Label>
           <CurrencyInput 
             id="amount" 
             value={amount}
