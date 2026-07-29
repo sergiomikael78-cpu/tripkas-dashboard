@@ -5,12 +5,14 @@ import { Badge } from '@/components/ui/badge'
 import { useDashboardStats } from '@/hooks/useDashboardStats'
 import { useWorkspace } from '@/hooks/useWorkspace'
 import { useSettings } from '@/hooks/useSettings'
-import { 
-  TrendingUp, 
-  AlertTriangle, 
-  Package, 
-  Banknote, 
-  MapPin, 
+import { useQueryClient } from '@tanstack/react-query'
+import { PullToRefresh } from '@/components/ui/PullToRefresh'
+import {
+  TrendingUp,
+  AlertTriangle,
+  Package,
+  Banknote,
+  MapPin,
   CreditCard,
   ArrowDownRight,
   BarChart3,
@@ -19,9 +21,14 @@ import {
 } from 'lucide-react'
 
 export default function DashboardPage() {
+  const queryClient = useQueryClient()
   const { data: stats, isLoading } = useDashboardStats()
   const { data: workspace } = useWorkspace()
   const { settings } = useSettings()
+
+  const handleRefresh = async () => {
+    await queryClient.invalidateQueries()
+  }
 
   const usdRate = settings?.usd_to_idr_rate || 16000
   const khrRate = settings?.khr_to_usd_rate || 4000
@@ -33,8 +40,9 @@ export default function DashboardPage() {
   const profitBersih = (stats?.profitBulanIni || 0) - (stats?.totalPengeluaranBulanIni || 0)
 
   return (
-    <div className="space-y-6">
-      {/* Header Section */}
+    <PullToRefresh onRefresh={handleRefresh}>
+      <div className="space-y-6">
+        {/* Header Section */}
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-foreground via-foreground to-amber-500/80 bg-clip-text text-transparent">
@@ -234,6 +242,7 @@ export default function DashboardPage() {
           )}
         </>
       )}
-    </div>
+      </div>
+    </PullToRefresh>
   )
 }

@@ -7,7 +7,7 @@ function Card({
   size = "default",
   variant = "default",
   ...props
-}: React.ComponentProps<"div"> & { 
+}: React.ComponentProps<"div"> & {
   size?: "default" | "sm"
   variant?: "default" | "nested" | "glass"
 }) {
