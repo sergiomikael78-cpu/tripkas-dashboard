@@ -34,14 +34,14 @@ export function PaymentForm({
     
     if (!saleId) return
     
-    if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
+    if (!markLunas && (!amount || isNaN(Number(amount)) || Number(amount) <= 0)) {
       alert('Nominal harus lebih dari 0')
       return
     }
 
     createPayment.mutate({
       sale_id: saleId,
-      amount: Number(amount),
+      amount: markLunas ? 0 : Number(amount),
       paid_at: paidAt,
       notes: notes || undefined,
       mark_lunas: markLunas
@@ -76,18 +76,20 @@ export function PaymentForm({
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="amount" className="text-xs font-semibold">Nominal Pembayaran (KHR)</Label>
-          <CurrencyInput 
-            id="amount" 
-            value={amount}
-            onChangeValue={(val) => setAmount(val ?? '')}
-            placeholder="Misal: 500000"
-            required
-            min="1"
-            className="h-10 rounded-xl font-bold tabular-nums text-emerald-500"
-          />
-        </div>
+        {!markLunas && (
+          <div className="space-y-2">
+            <Label htmlFor="amount" className="text-xs font-semibold">Nominal Pembayaran (KHR)</Label>
+            <CurrencyInput 
+              id="amount" 
+              value={amount}
+              onChangeValue={(val) => setAmount(val ?? '')}
+              placeholder="Misal: 500000"
+              required={!markLunas}
+              min="1"
+              className="h-10 rounded-xl font-bold tabular-nums text-emerald-500"
+            />
+          </div>
+        )}
 
         <div className="space-y-2">
           <Label htmlFor="paidAt" className="text-xs font-semibold">Tanggal Penerimaan Pembayaran</Label>
