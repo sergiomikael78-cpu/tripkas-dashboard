@@ -41,7 +41,7 @@ export function PaymentForm({
 
     createPayment.mutate({
       sale_id: saleId,
-      amount: markLunas ? 0 : Number(amount),
+      amount: markLunas ? totalAmount : Number(amount),
       paid_at: paidAt,
       notes: notes || undefined,
       mark_lunas: markLunas
